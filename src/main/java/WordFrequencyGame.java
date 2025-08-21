@@ -7,37 +7,37 @@ public class WordFrequencyGame {
         if (words.length == 1) {
             return inputStr + " 1";
         } else try {
-
             //split the input string with 1 to n pieces of spaces
-
-            List<Input> frequencies = getOrderWords(words);
-
-            //get the map for the next step of sizing the same word
-            Map<String, List<Input>> map = getListMap(frequencies);
-
-            List<Input> list = new ArrayList<>();
-            for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
-                Input input = new Input(entry.getKey(), entry.getValue().size());
-                list.add(input);
-            }
-            frequencies = list;
-
-            frequencies.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Input w : frequencies) {
-                String s = w.getValue() + " " + w.getWordCount();
-                joiner.add(s);
-            }
-            return joiner.toString();
+            List<Input> frequencies = getStringPair(words);
+            return formatAndSortedWords(frequencies);
         } catch (Exception e) {
-
-
             return "Calculate Error";
         }
     }
 
-    private List<Input> getOrderWords(String[] words) {
+    private String formatAndSortedWords(List<Input> frequencies) {
+        //get the map for the next step of sizing the same word
+
+        Map<String, List<Input>> map = getListMap(frequencies);
+
+        List<Input> list = new ArrayList<>();
+        for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
+            Input input = new Input(entry.getKey(), entry.getValue().size());
+            list.add(input);
+        }
+        frequencies = list;
+
+        frequencies.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+
+        StringJoiner joiner = new StringJoiner("\n");
+        for (Input w : frequencies) {
+            String s = w.getValue() + " " + w.getWordCount();
+            joiner.add(s);
+        }
+        return joiner.toString();
+    }
+
+    private List<Input> getStringPair(String[] words) {
         return Arrays.stream(words)
                 .map(s -> new Input(s, 1))
                 .toList();
