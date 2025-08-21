@@ -17,9 +17,20 @@ public class WordFrequencyGame {
 
     private String formatAndSortedWords(List<Input> frequencies) {
         //get the map for the next step of sizing the same word
+        frequencies = getOrderWords(frequencies);
+        return addNumsWordsPair(frequencies);
+    }
 
+    private String addNumsWordsPair(List<Input> frequencies) {
+        StringJoiner joiner = new StringJoiner("\n");
+        frequencies.stream()
+                .map(w -> w.getValue() + " " + w.getWordCount())
+                .forEach(joiner::add);
+        return joiner.toString();
+    }
+
+    private List<Input> getOrderWords(List<Input> frequencies) {
         Map<String, List<Input>> map = getListMap(frequencies);
-
         List<Input> list = new ArrayList<>();
         for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
             Input input = new Input(entry.getKey(), entry.getValue().size());
@@ -28,13 +39,7 @@ public class WordFrequencyGame {
         frequencies = list;
 
         frequencies.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-        StringJoiner joiner = new StringJoiner("\n");
-        for (Input w : frequencies) {
-            String s = w.getValue() + " " + w.getWordCount();
-            joiner.add(s);
-        }
-        return joiner.toString();
+        return frequencies;
     }
 
     private List<Input> getStringPair(String[] words) {
